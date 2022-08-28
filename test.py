@@ -1,27 +1,38 @@
-from selenium import webdriver
+from seleniumwire import webdriver
+
+HOST = '127.0.0.1'
+
+options = {
+    'addr': HOST
+}
+def test_firefox():
+    firefox = webdriver.Remote(command_executor='http://{}:4444/wd/hub'.format(HOST), seleniumwire_options=options)
+    firefox.get('https://www.google.com')
+    print('Firefox', firefox.title)
+    for request in firefox.requests:
+        if request.response:
+            print(
+                request.url,
+                request.response.status_code,
+                request.response.headers['Content-Type']
+            )
+    firefox.quit()
 
 
-firefox_options = webdriver.FirefoxOptions()
-firefox_options.add_argument("--lang=de")
-# firefox_options.add_experimental_option("prefs", {"profile.default_content_setting_values.geolocation": 1})
+def test_chrome():
+    chrome = webdriver.Remote(command_executor='http://{}:4444/wd/hub'.format(HOST), seleniumwire_options=options)
+    chrome.get('https://www.google.com')
+    print('chrome', chrome.title)
+    for request in chrome.requests:
+        if request.response:
+            print(
+                request.url,
+                request.response.status_code,
+                request.response.headers['Content-Type']
+            )
+    chrome.quit()
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--lang=de")
 
-chrome = webdriver.Remote(
-          command_executor='http://localhost:4444/wd/hub',
-          options=chrome_options)
-
-# firefox = webdriver.Remote(
-#           command_executor='http://localhost:4444/wd/hub',
-#           # options=firefox_options
-# )
-
-chrome.get('https://www.google.com')
-print(chrome.title)
-
-# firefox.get('https://www.google.com')
-# print(firefox.title)
-
-chrome.quit()
-# firefox.quit()
+if __name__ == "__main__":
+    test_firefox()
+    test_chrome()
