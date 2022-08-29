@@ -2,7 +2,7 @@ from seleniumwire import webdriver
 import logging
 import time
 
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 HOST = '127.0.0.1'
 
@@ -28,21 +28,23 @@ firefox_capabilities = {
     "selenoid:options": {
         "enableVNC": True
     },
-    'goog:firefoxOptions': {'extensions': [],
-                           'args': ['--proxy-server=host.docker.internal:9922',
-                                    '--ignore-certificate-errors']
-                           }
+    # 'goog:firefoxOptions': {'extensions': [],
+    #                        'args': ['--proxy-server=host.docker.internal:9922',
+    #                                 '--ignore-certificate-errors']
+    #                        }
 }
 
 
 
 def test_firefox():
+    print("Firefox starting test ...")
     firefox = webdriver.Remote(command_executor='http://{}:4444/wd/hub'.format(HOST),
                                desired_capabilities=firefox_capabilities,
                                seleniumwire_options=options
                                )
     firefox.get('https://www.google.com')
     print('Firefox', firefox.title)
+    print(firefox.requests)
     for request in firefox.requests:
         if request.response:
             print(
@@ -50,7 +52,7 @@ def test_firefox():
                 request.response.status_code,
                 request.response.headers['Content-Type']
             )
-    time.sleep(15)
+    time.sleep(100)
     firefox.quit()
 
 
