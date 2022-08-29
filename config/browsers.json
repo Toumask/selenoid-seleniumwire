@@ -2,15 +2,10 @@
     "firefox": {
         "default": "104.0",
         "versions": {
-            "104.0_VNC": {
-                "image": "selenoid/vnc_firefox:104.0",
-                "port": "4444",
-                "path": "/",
-                "env" : ["TZ=Europe/Berlin"]
-            },
             "104.0": {
                 "image": "selenoid/firefox:104.0",
                 "port": "4444",
+                "path": "/wd/hub",
                 "env" : ["TZ=Europe/Berlin"]
             }
         }
@@ -22,11 +17,6 @@
                 "image": "selenoid/chrome:104.0",
                 "port": "4444",
                 "path": "/",
-                "env" : ["TZ=Europe/Berlin"]
-            },
-            "104.0_VNC": {
-                "image": "selenoid/vnc_chrome:104.0",
-                "port": "4444",
                 "env" : ["TZ=Europe/Berlin"]
             }
         }
