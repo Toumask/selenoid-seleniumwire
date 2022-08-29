@@ -20,5 +20,16 @@
                 "env" : ["TZ=Europe/Berlin"]
             }
         }
+    },
+    "opera": {
+    "default": "88.0",
+    "versions": {
+        "88.0": {
+            "image": "selenoid/opera:88.0",
+            "port": "4444",
+            "path": "/",
+            "env" : ["TZ=Europe/Berlin"]
+        }
     }
+}
 }

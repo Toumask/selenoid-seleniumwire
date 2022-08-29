@@ -23,28 +23,39 @@ chrome_capabilities = {
                            }
 }
 
+opera_capabilities = {
+    "browserName": "opera",
+    "selenoid:options": {
+        "enableVNC": True
+    },
+    'OperaOptions': {'extensions': [],
+                           'args': ['--proxy-server=host.docker.internal:9922',
+                                    '--ignore-certificate-errors']
+                           }
+}
+
 firefox_capabilities = {
     "browserName": "firefox",
     "selenoid:options": {
         "enableVNC": True
     },
-    # 'goog:firefoxOptions': {'extensions': [],
-    #                        'args': ['--proxy-server=host.docker.internal:9922',
-    #                                 '--ignore-certificate-errors']
-    #                        }
+    "alwaysMatch": {
+        'moz:firefoxOptions': {'extensions': [],
+                               'args': ['--proxy-server=host.docker.internal:9922',
+                                        '--ignore-certificate-errors',
+                                        '--headless']
+                               }
+    }
 }
-
 
 
 def test_firefox():
     print("Firefox starting test ...")
     firefox = webdriver.Remote(command_executor='http://{}:4444/wd/hub'.format(HOST),
                                desired_capabilities=firefox_capabilities,
-                               seleniumwire_options=options
-                               )
+                               seleniumwire_options=options)
     firefox.get('https://www.google.com')
     print('Firefox', firefox.title)
-    print(firefox.requests)
     for request in firefox.requests:
         if request.response:
             print(
@@ -52,7 +63,7 @@ def test_firefox():
                 request.response.status_code,
                 request.response.headers['Content-Type']
             )
-    time.sleep(100)
+    time.sleep(15)
     firefox.quit()
 
 
@@ -73,7 +84,25 @@ def test_chrome():
     time.sleep(15)
     chrome.quit()
 
+def test_opera():
+    print("Opera starting test ...")
+    opera = webdriver.Remote(command_executor='http://{}:4444/wd/hub'.format(HOST),
+                              desired_capabilities=opera_capabilities,
+                              seleniumwire_options=options)
+    opera.get('https://www.google.com')
+    print('opera', opera.title)
+    for request in opera.requests:
+        if request.response:
+            print(
+                request.url,
+                request.response.status_code,
+                request.response.headers['Content-Type']
+            )
+    time.sleep(15)
+    opera.quit()
+
 
 if __name__ == "__main__":
+    # test_chrome()
     # test_firefox()
-    test_chrome()
+    test_opera()
