@@ -49,7 +49,6 @@ def test_firefox():
                                )
     firefox.get('https://www.github.com')
     print('Firefox', firefox.title)
-    print(firefox.requests)
     for request in firefox.requests:
         if request.response:
             print(
@@ -81,4 +80,5 @@ def test_chrome():
 
 if __name__ == "__main__":
     test_chrome()
+    print('######################################################')
     test_firefox()
