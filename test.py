@@ -1,9 +1,9 @@
-from selenium.webdriver import DesiredCapabilities
 from seleniumwire import webdriver
-import logging
 import time
+import logging
 
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
+
 HOST = '127.0.0.1'
 
 options = {
@@ -19,19 +19,25 @@ chrome_capabilities = {
     },
     'goog:chromeOptions': {'extensions': [],
                            'args': ['--proxy-server=host.docker.internal:9922',
-                                    '--ignore-certificate-errors', '--force-dark-mode']
+                                    '--ignore-certificate-errors',
+                                    '--incognito'
+                                    ]
                            }
 }
 
 firefox_capabilities = {
-    "browserName": "firefox",
-    "marionette": False,
+    'browserName': 'firefox',
+    'acceptInsecureCerts': True,
+    'moz:debuggerAddress': True,
+    'marionette': True,
+    'proxy': {
+        "proxyType": "MANUAL",
+        "httpProxy": "host.docker.internal:9922",
+        "sslProxy": "host.docker.internal:9922"
+    },
     "selenoid:options": {
         "enableVNC": True
     },
-    'moz:firefoxOptions': {'args': ['--proxy-server=host.docker.internal:9922',
-                                    '--ignore-certificate-errors',
-                                    '--force-dark-mode', ]}
 }
 
 
@@ -39,7 +45,8 @@ def test_firefox():
     print("Firefox starting test ...")
     firefox = webdriver.Remote(command_executor='http://{}:4444/wd/hub'.format(HOST),
                                desired_capabilities=firefox_capabilities,
-                               seleniumwire_options=options)
+                               seleniumwire_options=options
+                               )
     firefox.get('https://www.github.com')
     print('Firefox', firefox.title)
     print(firefox.requests)
@@ -50,7 +57,7 @@ def test_firefox():
                 request.response.status_code,
                 request.response.headers['Content-Type']
             )
-    time.sleep(100)
+    time.sleep(20)
     firefox.quit()
 
 
@@ -68,10 +75,10 @@ def test_chrome():
                 request.response.status_code,
                 request.response.headers['Content-Type']
             )
-    time.sleep(15)
+    time.sleep(20)
     chrome.quit()
 
 
 if __name__ == "__main__":
     test_chrome()
-    # test_firefox()
+    test_firefox()
