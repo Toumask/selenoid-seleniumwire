@@ -19,9 +19,7 @@ chrome_capabilities = {
     },
     'goog:chromeOptions': {'extensions': [],
                            'args': ['--proxy-server=host.docker.internal:9922',
-                                    '--ignore-certificate-errors',
-                                    '--incognito'
-                                    ]
+                                    '--ignore-certificate-errors']
                            }
 }
 
